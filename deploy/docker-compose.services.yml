@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:13.8-bullseye
+    hostname: quantex-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: $QUANTEX_DB_USER
+      POSTGRES_USER: $QUANTEX_DB_PASS
+      POSTGRES_DB: "quantex"
+    volumes:
+      - quantex-db-data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: pg_isready -U quantex
+      interval: 2s
+      timeout: 3s
+      retries: 40
+
+volumes:
+  quantex-db-data:
+    name: quantex-db-data

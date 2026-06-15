@@ -1,0 +1,75 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./deploy/api.Dockerfile
+    image: quantex:${QUANTEX_VERSION:-latest}
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      QUANTEX_HOST: 0.0.0.0
+      QUANTEX_DB_HOST: ${QUANTEX_DB_HOST}
+      QUANTEX_DB_PORT: ${QUANTEX_DB_PORT}
+      QUANTEX_DB_USER: ${QUANTEX_DB_USER}
+      QUANTEX_DB_PASS: ${QUANTEX_DB_PASS}
+      QUANTEX_DB_BASE: ${QUANTEX_DB_BASE}
+      QUANTEX_SECRET_KEY: ${QUANTEX_SECRET_KEY}
+
+  db:
+    image: postgres:13.8-bullseye
+    hostname: "quantex-db"
+    environment:
+      POSTGRES_PASSWORD: ${QUANTEX_DB_PASS}
+      POSTGRES_USER: ${QUANTEX_DB_USER}
+      POSTGRES_DB: ${QUANTEX_DB_BASE}
+    volumes:
+      - quantex-db-data:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready -U quantex
+      interval: 2s
+      timeout: 3s
+      retries: 40
+    networks:
+      - quantex_default
+
+  migrator:
+    build:
+      context: .
+      dockerfile: ./deploy/migrator.Dockerfile
+    restart: "no"
+    command: alembic upgrade head
+    environment:
+      QUANTEX_DB_HOST: ${QUANTEX_DB_HOST}
+      QUANTEX_DB_PORT: ${QUANTEX_DB_PORT}
+      QUANTEX_DB_USER: ${QUANTEX_DB_USER}
+      QUANTEX_DB_PASS: ${QUANTEX_DB_PASS}
+      QUANTEX_DB_BASE: ${QUANTEX_DB_BASE}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - quantex_default
+
+volumes:
+  quantex-db-data:
+    name: quantex-db-data
+
+networks:
+  quantex_default:
+    name: quantex_default
+    driver: bridge
