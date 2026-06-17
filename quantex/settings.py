@@ -60,7 +60,6 @@ class Settings(BaseSettings):  # type: ignore
     edenai_api_key: str = "API_KEY"
     telegram_bot_api_key: str = "API_KEY"
     telegram_chat_id: str = "CHAT_ID"
-
     @property
     def db_url(self) -> URL:
         """
@@ -68,15 +67,9 @@ class Settings(BaseSettings):  # type: ignore
 
         :return: database URL.
         """
-        return URL.build(
-            scheme="postgresql+asyncpg",
-            host=self.db_host,
-            port=self.db_port,
-            user=self.db_user,
-            password=self.db_pass,
-            path=f"/{self.db_base}",
-        )
-
+        # ALTERADO PARA USAR SQLITE LOCALMENTE
+        from sqlalchemy import make_url
+        return make_url("sqlite+aiosqlite:///./quantex.db")
     class Config:
         env_file = ".env"
         env_prefix = "QUANTEX_"

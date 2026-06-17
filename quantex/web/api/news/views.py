@@ -1,9 +1,7 @@
 import typing
-from fastapi import APIRouter
-from fastapi.param_functions import Depends
+from fastapi import APIRouter, Depends, Query
 from starlette.responses import JSONResponse
 from quantex.database.dao.news_dao import NewsDAO
-
 from quantex.web.api.news.schema import NewsModelCreateDTO
 from quantex.web.dependencies import verify_secret
 
@@ -13,11 +11,11 @@ router = APIRouter()
 @router.get("/", dependencies=[Depends(verify_secret)])
 async def get_news(
     news_dao: NewsDAO = Depends(),
-    news_id: typing.Optional[int] = None,
-    ticker: typing.Optional[str] = None,
-    term: typing.Optional[str] = None,
-    result: typing.Optional[str] = None,
-    headline: typing.Optional[str] = None,
+    news_id: typing.Optional[int] = Query(None, description="ID da notícia"),
+    ticker: typing.Optional[str] = Query(None, description="Ticker da ação"),
+    term: typing.Optional[str] = Query(None, description="Termo de busca"),
+    result: typing.Optional[str] = Query(None, description="Resultado da análise"),
+    headline: typing.Optional[str] = Query(None, description="Título da notícia"),
 ):
     """Get news by id and optional ticker, term or result."""
 
