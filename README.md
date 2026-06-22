@@ -72,10 +72,11 @@ python -m quantex
 All endpoints require the x-secret header: x-secret: secret
 
 📡 API Endpoints
-Method	Endpoint	Description
-GET	/api/news/	List all news
-POST	/api/news/	Create a new news entry
-GET	/api/news/{id}	Get news by ID
+| Método | Endpoint | Descrição |
+|--------|----------|-------------|
+| GET | `/api/news/` | Lista todas as notícias |
+| POST | `/api/news/` | Cria uma nova notícia |
+| GET | `/api/news/{id}` | Busca notícia por ID |
 
 📌 Notes
 The original project was broken and abandoned.
@@ -108,15 +109,6 @@ MIT — use, modify, and share freely.
 
 ---
 
-## 🚀 **How to apply:**
-
-1. Access: `https://github.com/alictech7-oss/quantex-news-api`
-2. Click on the `README.md` file
-3. Click the pencil (✏️) to edit
-4. Replace with the content above
-5. Commit directly to the `main` branch or make a PR
-
----
 
 
 
