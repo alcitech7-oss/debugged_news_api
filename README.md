@@ -52,8 +52,9 @@ quantex/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/alictech7-oss/quantex-news-api.git
-cd quantex-news-api
+# 1. Clone o repositório
+git clone https://github.com/alcitech7-oss/debugged_news_api.git
+cd debugged_news_api
 
 # 2. Create and activate virtual environment
 python -m venv venv
