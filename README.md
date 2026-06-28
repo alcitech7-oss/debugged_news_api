@@ -51,24 +51,25 @@ quantex/
 ## 📦 How to Run
 
 ```bash
-# 1. Clone the repository
-# 1. Clone o repositório
+# 1. Clone
 git clone https://github.com/alcitech7-oss/debugged_news_api.git
 cd debugged_news_api
 
-# 2. Create and activate virtual environment
+# 2. Create and activate venv
 python -m venv venv
 venv\Scripts\activate
 
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Run migrations
+# 4. Install the project in editable mode (resolve PackageNotFoundError)
+pip install -e .
+
+# 5. Run migrations
 alembic upgrade head
 
-# 5. Start the server
+# 6. Start the server
 python -m quantex
-
 🔑 Authentication
 All endpoints require the x-secret header: x-secret: secret
 
